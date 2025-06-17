@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, jsonify
-from gtts import gTTS
-import os
-import wikipedia
+from flask import Flask, render_template, request, jsonify, url_for
 import datetime
+import os
+from gtts import gTTS
+import wikipedia
 
 app = Flask(__name__)
 
@@ -51,7 +51,7 @@ def ask():
         msg = "Tôi chưa hiểu. Hãy thử lại." if language == "vi" else "I didn't understand. Please try again."
 
     audio_path = speak(msg)
-    return jsonify({"text": msg, "audio": audio_path})
+        return jsonify({"text": msg, "audio": url_for('static', filename='output.mp3')})
 
 if __name__ == "__main__":
     app.run(debug=True)
