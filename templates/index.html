@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChatbotPro AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #chat-form {
+            display: flex;
+            margin-top: 20px;
+        }
+        #query {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        audio {
+            margin-top: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>ChatbotPro AI</h1>
+    <form id="chat-form">
+        <input type="text" id="query" placeholder="Nhập câu hỏi..." required autocomplete="off">
+        <button type="submit">Gửi</button>
+    </form>
+    <div id="response"></div>
+    <audio id="audio" controls hidden></audio>
+
+    <script>
+        const form = document.getElementById('chat-form');
+        const queryInput = document.getElementById('query');
+        const responseDiv = document.getElementById('response');
+        const audio = document.getElementById('audio');
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const query = queryInput.value;
+            const res = await fetch('/ask', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: `query=${encodeURIComponent(query)}`
+            });
+            const data = await res.json();
+            responseDiv.textContent = data.text;
+            audio.src = data.audio;
+            audio.hidden = false;
+            audio.play();
+        };
+    </script>
+</body>
+</html>
